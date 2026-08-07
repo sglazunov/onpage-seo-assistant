@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { AuditResult, LinkInfo } from '../../shared/types';
+import type { LinkCheckResult } from '../../background/link-checker';
 import { exportLinksCsv } from '../../core/export';
 import { useI18n } from '../i18n-context';
 import { api, downloadFile, requestHostPermission } from '../api';
@@ -17,12 +18,20 @@ function isProblem(link: LinkInfo): boolean {
   );
 }
 
+/** Only a real 4xx/5xx response is rendered as a failure. */
+const BAD_OUTCOMES = new Set(['client-error', 'server-error']);
+const INCONCLUSIVE_OUTCOMES = new Set(['cors', 'timeout', 'network', 'unknown']);
+
+const MAX_ROWS = 500;
+
 export function LinksTab({
   result,
   onLinkStatuses,
+  concurrency,
 }: {
   result: AuditResult;
-  onLinkStatuses: (results: { url: string; status?: number; redirectedTo?: string }[]) => void;
+  onLinkStatuses: (results: LinkCheckResult[]) => void;
+  concurrency: number;
 }) {
   const { t } = useI18n();
   const [filter, setFilter] = useState<Filter>('all');
@@ -30,6 +39,7 @@ export function LinksTab({
   const [permissionDenied, setPermissionDenied] = useState(false);
 
   const links = result.page.links;
+  const checked = links.some((l) => Boolean(l.checkResult));
 
   const stats = useMemo(
     () => ({
@@ -80,7 +90,7 @@ export function LinksTab({
     try {
       const results = await api.checkLinks(
         unique.map((l) => ({ resolved: l.resolved, type: l.type })),
-        6,
+        concurrency,
       );
       onLinkStatuses(results);
     } finally {
@@ -165,25 +175,45 @@ export function LinksTab({
         <p className="notice notice--warning">{t('ui.errorsUi.noPermission')}</p>
       ) : null}
       <p className="muted small">{t('ui.links.needsPermission')}</p>
+      {checked ? <p className="muted small">{t('ui.links.inconclusiveNote')}</p> : null}
+
+      {visible.length > MAX_ROWS ? (
+        <p className="muted small">
+          {t('ui.showing', { shown: MAX_ROWS, total: visible.length })}
+        </p>
+      ) : null}
 
       <DataTable
         headers={[t('ui.links.anchor'), 'URL', t('ui.status'), '']}
-        rows={visible.slice(0, 500).map((link) => [
+        rows={visible.slice(0, MAX_ROWS).map((link) => [
           <span className="clamp-2">{link.text || <em>{t('ui.links.noAnchor')}</em>}</span>,
           <span className="wrap-any">
             {link.resolved}
             {link.rel.length ? <em className="rel"> rel={link.rel.join(' ')}</em> : null}
           </span>,
-          <span
-            className={
-              typeof link.status === 'number' && link.status >= 400 ? 'status status--bad' : 'status'
-            }
-          >
-            {link.status ?? link.type}
-          </span>,
+          <StatusCell link={link} />,
           <ShowButton selector={link.selector} category="links" label="a" />,
         ])}
       />
     </div>
+  );
+}
+
+function StatusCell({ link }: { link: LinkInfo }) {
+  const { t } = useI18n();
+  if (!link.checkResult) return <span className="status">{link.type}</span>;
+
+  const bad = BAD_OUTCOMES.has(link.checkResult);
+  const inconclusive = INCONCLUSIVE_OUTCOMES.has(link.checkResult);
+  const label = t(`ui.links.outcome.${link.checkResult}`);
+
+  return (
+    <span
+      className={bad ? 'status status--bad' : inconclusive ? 'status muted' : 'status status--ok'}
+      title={link.checkError ?? undefined}
+    >
+      {link.status ?? label}
+      {link.status && link.checkResult !== 'ok' ? ` · ${label}` : ''}
+    </span>
   );
 }

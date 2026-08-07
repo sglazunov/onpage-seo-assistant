@@ -6,6 +6,12 @@ import { IssueList } from '../components/IssueList';
 export function OverviewTab({ result }: { result: AuditResult }) {
   const { t } = useI18n();
   const truncated = Object.entries(result.page.truncated);
+  // Every point taken off the score, largest first — the score must be
+  // reconstructable by the user, not just asserted.
+  const penalties = result.issues
+    .filter((i) => i.scoreImpact > 0)
+    .sort((a, b) => b.scoreImpact - a.scoreImpact)
+    .slice(0, 8);
 
   return (
     <div className="pane">
@@ -15,6 +21,26 @@ export function OverviewTab({ result }: { result: AuditResult }) {
             n: truncated.map(([key, value]) => `${key}: ${value}`).join(', '),
           })}
         </p>
+      ) : null}
+
+      {penalties.length > 0 ? (
+        <>
+          <h2 className="pane__title">{t('ui.overview.whyScore')}</h2>
+          <ul className="penalties">
+            {penalties.map((issue) => (
+              <li className="penalties__row" key={`${issue.id}-${issue.selector ?? ''}`}>
+                <span className="penalties__value">−{issue.scoreImpact}</span>
+                <span className="penalties__label">{issue.title}</span>
+              </li>
+            ))}
+            <li className="penalties__row penalties__row--total">
+              <span className="penalties__value">{result.score.overall}</span>
+              <span className="penalties__label">
+                {t('ui.score')} · 100 − {result.score.totalPenalty}
+              </span>
+            </li>
+          </ul>
+        </>
       ) : null}
 
       <h2 className="pane__title">{t('ui.overview.issues')}</h2>

@@ -12,7 +12,7 @@ import type {
   StructuredDataBlock,
 } from '../shared/types';
 import { countWords, termFrequencies } from '../core/analyzers/text';
-import { cssPath } from './selector';
+import { cssPath, resetSelectorCache } from './selector';
 
 /** JS errors are captured from page load onward — see installErrorRecorder(). */
 const jsErrors: string[] = [];
@@ -445,6 +445,9 @@ function collectHreflang(): HreflangEntry[] {
 /** The single entry point the message handler calls. Never throws. */
 export function collectPageData(): PageData {
   const started = performance.now();
+  // Selector positions are cached per pass; the DOM may have changed since the
+  // previous audit, which matters most on SPA re-renders.
+  resetSelectorCache();
 
   const titleElements = document.querySelectorAll('title');
   const titleElement = document.querySelector('title');

@@ -30,7 +30,6 @@
     "service_worker": "service-worker.js"
   },
   "permissions": ["activeTab", "scripting", "storage", "downloads"],
-  "optional_permissions": ["webNavigation"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
   "commands": {
     "_execute_action": {

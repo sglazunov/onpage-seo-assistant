@@ -26,7 +26,13 @@ export function SocialTab({ result }: { result: AuditResult }) {
       <h2 className="pane__title">{t('ui.social.preview')}</h2>
       <div className="og-card">
         {image ? (
-          <img className="og-card__img" src={image} alt="" loading="lazy" />
+          <img
+            className="og-card__img"
+            src={image}
+            alt=""
+            loading="lazy"
+            referrerPolicy="no-referrer"
+          />
         ) : (
           <div className="og-card__img og-card__img--empty">{t('ui.social.noImage')}</div>
         )}

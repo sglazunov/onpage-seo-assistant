@@ -15,6 +15,8 @@ export function ExportMenu({
 }) {
   const { t } = useI18n();
   const [copied, setCopied] = useState(false);
+  // Guards against a double click firing two downloads of the same report.
+  const running = useRef(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,9 +40,17 @@ export function ExportMenu({
   if (!open) return null;
 
   const download = (format: ExportFormat) => {
-    const file = buildExport(result, format);
-    downloadFile(file.filename, file.mime, file.content);
-    onClose();
+    if (running.current) return;
+    running.current = true;
+    try {
+      const file = buildExport(result, format);
+      downloadFile(file.filename, file.mime, file.content);
+    } finally {
+      onClose();
+      setTimeout(() => {
+        running.current = false;
+      }, 800);
+    }
   };
 
   return (

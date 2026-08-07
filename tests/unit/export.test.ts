@@ -68,4 +68,75 @@ describe('HTML and Markdown exports', () => {
   it('renders the heading outline in Markdown', () => {
     expect(buildExport(result, 'markdown').content).toContain('- H1: Ноутбуки в Екатеринбурге');
   });
+
+  it('keeps every Markdown table rectangular even when values contain a pipe', () => {
+    const hostile = runAudit(
+      makePage({ title: 'Ноутбук | дёшево | Екатеринбург', htmlLang: 'ru|RU' }),
+      { now: NOW },
+    );
+    const md = buildExport(hostile, 'markdown').content;
+
+    // Group consecutive "|" lines into tables and check each one separately.
+    let current: string[] = [];
+    const tables: string[][] = [];
+    for (const line of md.split('\n')) {
+      if (line.startsWith('|')) current.push(line);
+      else if (current.length) {
+        tables.push(current);
+        current = [];
+      }
+    }
+    if (current.length) tables.push(current);
+
+    expect(tables.length).toBeGreaterThan(0);
+    for (const table of tables) {
+      // A escaped pipe (\|) must not count as a column separator.
+      const widths = new Set(table.map((row) => row.replace(/\\\|/g, '').split('|').length));
+      expect(widths.size).toBe(1);
+    }
+  });
+
+  it('HTML report is self-contained: no external resource is loaded', () => {
+    const html = buildExport(result, 'html').content;
+    // Anchors are fine — they are not fetched. Anything that loads is not.
+    expect(html).not.toMatch(/<script[\s>]/i);
+    expect(html).not.toMatch(/<link[^>]+rel=["']?stylesheet/i);
+    expect(html).not.toMatch(/<img[\s>]/i);
+    expect(html).not.toMatch(/url\(\s*https?:/i);
+    expect(html).not.toMatch(/@import/i);
+  });
+
+  it('keeps Cyrillic intact in every format', () => {
+    // CSV carries only the issue table, so assert on Cyrillic in general
+    // rather than on a string that lives in the page metadata.
+    for (const format of ['json', 'csv', 'markdown', 'html'] as const) {
+      expect(buildExport(result, format).content).toMatch(/[А-Яа-яЁё]{4,}/);
+    }
+    expect(buildExport(result, 'json').content).toContain('Екатеринбурге');
+  });
+});
+
+describe('filename safety', () => {
+  // Reserved on Windows (plus space, which breaks naive shell handling).
+  const FORBIDDEN_WINDOWS = ['<', '>', ':', '"', '/', '\\', '|', '?', '*', ' '];
+
+  it.each([
+    'https://пример.рф/путь?q=1&x=<script>',
+    'https://example.com:8443/a/b/c?d=e#f',
+    'https://sub.domain.example.co.uk/very/deep/path',
+    'http://127.0.0.1:3000/page',
+  ])('produces a Windows-safe name for %s', (url) => {
+    const audited = runAudit(makePage({ url, finalUrl: url }), { now: NOW });
+    for (const format of ['json', 'csv', 'markdown', 'html'] as const) {
+      const name = buildExport(audited, format).filename;
+      for (const char of FORBIDDEN_WINDOWS) expect(name).not.toContain(char);
+      expect([...name].every((c) => c.codePointAt(0)! >= 0x20)).toBe(true);
+      expect(name.length).toBeLessThan(120);
+    }
+  });
+
+  it('falls back to a stable name when the URL cannot be parsed', () => {
+    const audited = runAudit(makePage({ finalUrl: 'not a url' }), { now: NOW });
+    expect(buildExport(audited, 'json').filename).toBe('seo-audit-page-2026-08-07.json');
+  });
 });

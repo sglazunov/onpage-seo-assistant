@@ -61,7 +61,18 @@ export function exportIssuesCsv(result: AuditResult): ExportFile {
 
 export function exportLinksCsv(result: AuditResult): ExportFile {
   const rows: (string | number)[][] = [
-    ['URL', 'Anchor', 'Type', 'Rel', 'Target', 'Nofollow', 'Status', 'Redirected to', 'Selector'],
+    [
+      'URL',
+      'Anchor',
+      'Type',
+      'Rel',
+      'Target',
+      'Nofollow',
+      'Status',
+      'Check result',
+      'Redirected to',
+      'Selector',
+    ],
     ...result.page.links.map((l) => [
       l.resolved,
       l.text,
@@ -70,6 +81,7 @@ export function exportLinksCsv(result: AuditResult): ExportFile {
       l.target ?? '',
       l.nofollow ? 'yes' : 'no',
       l.status ?? '',
+      l.checkResult ?? '',
       l.redirectedTo ?? '',
       l.selector,
     ]),
@@ -116,6 +128,17 @@ export function exportJson(result: AuditResult): ExportFile {
 
 /* ----------------------------- Markdown ----------------------------- */
 
+/**
+ * Page data goes straight into Markdown tables, and a single `|` in a title
+ * silently shifts every column after it. Newlines break the row outright.
+ */
+function mdCell(value: unknown): string {
+  return String(value ?? '')
+    .replace(/\|/g, '\\|')
+    .replace(/\r?\n/g, ' ')
+    .trim();
+}
+
 export function exportMarkdown(result: AuditResult): ExportFile {
   const t = createTranslate(result.lang);
   const s = result.score;
@@ -134,7 +157,7 @@ export function exportMarkdown(result: AuditResult): ExportFile {
     `| ${t('ui.overview.byCategory')} | Score | Weight |`,
     '| --- | ---: | ---: |',
     ...s.categories.map(
-      (c) => `| ${t(`categories.${c.category}`)} | ${c.score} | ${c.weight} |`,
+      (c) => `| ${mdCell(t(`categories.${c.category}`))} | ${c.score} | ${c.weight} |`,
     ),
     '',
     `## ${t('ui.overview.issues')} (${result.issues.length})`,
@@ -160,15 +183,18 @@ export function exportMarkdown(result: AuditResult): ExportFile {
   lines.push(
     `## ${t('ui.tabs.meta')}`,
     '',
-    `| ${t('ui.value')} | ${t('ui.length')} |`,
-    '| --- | ---: |',
-    `| **Title:** ${meta.title ?? '—'} | ${(meta.title ?? '').length} |`,
-    `| **Canonical:** ${meta.canonicalResolved ?? '—'} | |`,
-    `| **Lang:** ${meta.htmlLang ?? '—'} | |`,
+    `| Tag | ${mdCell(t('ui.value'))} | ${mdCell(t('ui.length'))} |`,
+    '| --- | --- | ---: |',
+    `| **Title** | ${mdCell(meta.title ?? '—')} | ${(meta.title ?? '').length} |`,
+    `| **Canonical** | ${mdCell(meta.canonicalResolved ?? '—')} | |`,
+    `| **Lang** | ${mdCell(meta.htmlLang ?? '—')} | |`,
+    `| **Charset** | ${mdCell(meta.charset ?? '—')} | |`,
     '',
     `## ${t('ui.tabs.headings')}`,
     '',
-    ...meta.headings.map((h) => `${'  '.repeat(h.level - 1)}- H${h.level}: ${h.text || '—'}`),
+    ...meta.headings.map(
+      (h) => `${'  '.repeat(h.level - 1)}- H${h.level}: ${mdCell(h.text) || '—'}`,
+    ),
     '',
     `## ${t('ui.tabs.content')}`,
     '',

@@ -25,6 +25,7 @@
     "words": "words",
     "count": "items",
     "value": "Value",
+    "showing": "Showing {shown} of {total}",
     "status": "Status",
     "length": "Length",
     "recommendation": "Recommendation",
@@ -46,6 +47,7 @@
       "noIssues": "No issues found. All base checks passed.",
       "passedChecks": "Passed checks",
       "byCategory": "Score by category",
+      "whyScore": "How the score adds up",
       "filterAll": "All",
       "truncated": "Data truncated at limit: {n}"
     },
@@ -87,6 +89,17 @@
       "exportCsv": "Export CSV",
       "anchor": "Anchor",
       "noAnchor": "(no anchor)",
+      "outcome": {
+        "ok": "OK",
+        "redirect": "Redirect",
+        "client-error": "4xx error",
+        "server-error": "5xx error",
+        "cors": "CORS blocked",
+        "timeout": "Timeout",
+        "network": "Network error",
+        "unknown": "Unknown"
+      },
+      "inconclusiveNote": "CORS, timeout and network errors do not prove a link is broken — the check simply could not get a response. Such links do not lower the score.",
       "needsPermission": "Network checks need permission to access websites. It is requested once and can be revoked in browser settings."
     },
     "images": {

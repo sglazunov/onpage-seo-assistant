@@ -6,6 +6,50 @@
 const ID_SAFE = /^[A-Za-z][\w-]*$/;
 const MAX_DEPTH = 8;
 
+/**
+ * Per-element path segment (`div`, `a:nth-of-type(7)`, …).
+ *
+ * Computing a segment naively means scanning every sibling, which makes a page
+ * with 2000 anchors quadratic. Instead the first lookup fills the cache for all
+ * children of that parent in a single pass, so a whole document costs O(n).
+ */
+let cache = new WeakMap<Element, string>();
+
+/** Must run before each collection pass: the DOM may have changed since. */
+export function resetSelectorCache(): void {
+  // A WeakMap has no clear(); swapping the backing store is the cheap way.
+  cache = new WeakMap<Element, string>();
+}
+
+function fillSiblingSegments(parent: Element): void {
+  const counters = new Map<string, number>();
+  const totals = new Map<string, number>();
+
+  for (const child of parent.children) {
+    const tag = child.tagName;
+    totals.set(tag, (totals.get(tag) ?? 0) + 1);
+  }
+
+  for (const child of parent.children) {
+    const tag = child.tagName;
+    const index = (counters.get(tag) ?? 0) + 1;
+    counters.set(tag, index);
+    const lower = tag.toLowerCase();
+    cache.set(child, totals.get(tag)! > 1 ? `${lower}:nth-of-type(${index})` : lower);
+  }
+}
+
+function segmentFor(node: Element): string {
+  const cached = cache.get(node);
+  if (cached !== undefined) return cached;
+
+  const parent = node.parentElement;
+  if (!parent) return node.tagName.toLowerCase();
+
+  fillSiblingSegments(parent);
+  return cache.get(node) ?? node.tagName.toLowerCase();
+}
+
 export function cssPath(element: Element): string {
   if (element.id && ID_SAFE.test(element.id)) {
     // Only trust an id that is actually unique on this page.
@@ -34,16 +78,13 @@ export function cssPath(element: Element): string {
       break;
     }
 
-    const parent: Element | null = node.parentElement;
-    if (!parent) {
+    if (!node.parentElement) {
       parts.unshift(tag);
       break;
     }
 
-    const siblings = Array.from(parent.children).filter((c) => c.tagName === node!.tagName);
-    parts.unshift(siblings.length > 1 ? `${tag}:nth-of-type(${siblings.indexOf(node) + 1})` : tag);
-
-    node = parent;
+    parts.unshift(segmentFor(node));
+    node = node.parentElement;
     depth += 1;
   }
 

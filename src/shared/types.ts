@@ -72,8 +72,23 @@ export interface LinkInfo {
   /** Filled in later by the link status checker (v0.3 network pass). */
   status?: number;
   redirectedTo?: string;
+  /**
+   * Outcome class of the network probe. `cors`, `timeout` and `network` mean
+   * the check was inconclusive — such a link must never be called broken.
+   */
+  checkResult?: LinkCheckOutcome;
   checkError?: string;
 }
+
+export type LinkCheckOutcome =
+  | 'ok'
+  | 'redirect'
+  | 'client-error'
+  | 'server-error'
+  | 'cors'
+  | 'timeout'
+  | 'network'
+  | 'unknown';
 
 export interface ImageInfo {
   src: string;

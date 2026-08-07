@@ -7,6 +7,8 @@ import { DataTable, ShowButton, StatGrid } from '../components/ui';
 
 type Filter = 'all' | 'noAlt' | 'failed' | 'hidden';
 
+const MAX_ROWS = 300;
+
 export function ImagesTab({ result }: { result: AuditResult }) {
   const { t } = useI18n();
   const [filter, setFilter] = useState<Filter>('all');
@@ -83,11 +85,25 @@ export function ImagesTab({ result }: { result: AuditResult }) {
         </button>
       </div>
 
+      {visible.length > MAX_ROWS ? (
+        <p className="muted small">
+          {t('ui.showing', { shown: MAX_ROWS, total: visible.length })}
+        </p>
+      ) : null}
+
       <DataTable
         headers={['', 'ALT', t('ui.images.dimensions'), '']}
-        rows={visible.slice(0, 300).map((image) => [
+        rows={visible.slice(0, MAX_ROWS).map((image) => [
           image.src ? (
-            <img className="thumb" src={image.src} alt="" loading="lazy" />
+            // no-referrer keeps the extension URL out of the site's logs when
+            // the thumbnail is fetched.
+            <img
+              className="thumb"
+              src={image.src}
+              alt=""
+              loading="lazy"
+              referrerPolicy="no-referrer"
+            />
           ) : (
             <span className="thumb thumb--svg">SVG</span>
           ),

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { AuditResult, PageData, Settings } from '../shared/types';
 import type { RobotsInfo } from '../shared/messages';
+import type { LinkCheckResult } from '../background/link-checker';
 import { DEFAULT_SETTINGS } from '../shared/constants';
 import { runAudit } from '../core/analyzers/audit';
 import { api } from './api';
@@ -95,23 +96,28 @@ function Shell() {
     void api.saveHistory(result).catch(() => undefined);
   }, [result, settings.saveHistory]);
 
-  const onLinkStatuses = useCallback(
-    (results: { url: string; status?: number; redirectedTo?: string }[]) => {
-      const byUrl = new Map(results.map((r) => [r.url, r]));
-      setPage((previous) =>
-        previous
-          ? {
-              ...previous,
-              links: previous.links.map((link) => {
-                const hit = byUrl.get(link.resolved);
-                return hit ? { ...link, status: hit.status, redirectedTo: hit.redirectedTo } : link;
-              }),
-            }
-          : previous,
-      );
-    },
-    [],
-  );
+  const onLinkStatuses = useCallback((results: LinkCheckResult[]) => {
+    const byUrl = new Map(results.map((r) => [r.url, r]));
+    setPage((previous) =>
+      previous
+        ? {
+            ...previous,
+            links: previous.links.map((link) => {
+              const hit = byUrl.get(link.resolved);
+              return hit
+                ? {
+                    ...link,
+                    status: hit.status,
+                    redirectedTo: hit.redirectedTo,
+                    checkResult: hit.outcome,
+                    checkError: hit.error,
+                  }
+                : link;
+            }),
+          }
+        : previous,
+    );
+  }, []);
 
   const onTabKeyDown = (event: React.KeyboardEvent) => {
     const index = TABS.indexOf(tab);
@@ -186,7 +192,13 @@ function Shell() {
         {tab === 'overview' && <OverviewTab result={result} />}
         {tab === 'meta' && <MetaTab result={result} />}
         {tab === 'headings' && <HeadingsTab result={result} />}
-        {tab === 'links' && <LinksTab result={result} onLinkStatuses={onLinkStatuses} />}
+        {tab === 'links' && (
+          <LinksTab
+            result={result}
+            onLinkStatuses={onLinkStatuses}
+            concurrency={settings.linkCheckConcurrency}
+          />
+        )}
         {tab === 'images' && <ImagesTab result={result} />}
         {tab === 'schema' && <SchemaTab result={result} />}
         {tab === 'social' && <SocialTab result={result} />}
