@@ -65,7 +65,9 @@ function classifyLink(href: string, resolved: string): LinkType {
   try {
     const url = new URL(resolved);
     if (!/^https?:$/.test(url.protocol)) return 'invalid';
-    return url.hostname === location.hostname ? 'internal' : 'external';
+    // Compare host, not hostname: a different port is a different server, and
+    // URL already normalises the default ports away.
+    return url.host === location.host ? 'internal' : 'external';
   } catch {
     return 'invalid';
   }
@@ -302,6 +304,11 @@ const SKIP_TEXT_TAGS = new Set([
   'SVG',
   'CANVAS',
   'OPTION',
+  // Form controls are never page copy, and their default content must not end
+  // up in the report — the audit has no business reading what is in a form.
+  'TEXTAREA',
+  'SELECT',
+  'INPUT',
 ]);
 
 /** Walks the body once, splitting text into visible and hidden buckets. */

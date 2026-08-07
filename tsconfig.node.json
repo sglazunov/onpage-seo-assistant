@@ -9,5 +9,11 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["vite.config.ts", "vite.config.content.ts", "vite.config.sw.ts", "vitest.config.ts"]
+  "include": [
+    "vite.config.ts",
+    "vite.config.content.ts",
+    "vite.config.sw.ts",
+    "vitest.config.ts",
+    "playwright.config.ts"
+  ]
 }

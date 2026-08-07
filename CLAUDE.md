@@ -13,12 +13,21 @@ Chrome, Opera, Яндекс Браузер и другие Chromium с MV3. Ве
 
 ```bash
 npm install
-npm run build       # icons -> UI -> content -> service worker, всё в dist/
-npm test            # vitest, 65 тестов
-npm run typecheck   # tsc для src + отдельно для конфигов
+npm run build            # icons -> UI -> content -> service worker, всё в dist/
+npm test                 # vitest, 105 тестов (unit + jsdom)
+npm run typecheck        # tsc для src + отдельно для конфигов
 npm run lint
-npm run zip         # release/onpage-seo-assistant-<version>.zip
+npm run zip              # release/onpage-seo-assistant-<version>.zip
+
+npm run test:e2e:chrome      # 29 браузерных тестов в системном Chrome
+npm run test:e2e:opera       # то же в Opera
+npm run test:e2e:extension   # загружает dist/ как расширение (bundled Chromium)
 ```
+
+E2E требует `npx playwright install chromium` один раз — сборка Chromium нужна проекту
+`extension`, потому что **Chrome 137+ игнорирует `--load-extension`** и установить в него
+распакованное расширение из командной строки нельзя. Чтобы прогнать тот же набор в другом
+Chromium: `$env:SEO_BROWSER_PATH="…\opera.exe"; npm run test:e2e:extension`.
 
 Загрузка: `chrome://extensions` → Developer mode → Load unpacked → папка **`dist`** (не корень).
 
@@ -148,6 +157,13 @@ sitemap.xml, текущему URL и к адресам ссылок самой �
   сетевая ошибка. Ни то ни другое не считается битой ссылкой.
 - **Значения страницы ломают Markdown-таблицы.** Один символ `|` в title сдвигает все колонки —
   ячейки прогоняются через `mdCell()`.
+- **Internal/external считается по `host`, а не по `hostname`.** Иначе ссылка с
+  `localhost:5177` на `localhost:8080` считается внутренней, хотя это другой сервер.
+  `URL.host` сам убирает порт по умолчанию, поэтому `example.com:443` не ломается.
+- **`<textarea>` и `<select>` исключены из сбора текста.** Их содержимое — не копирайт
+  страницы, а данные формы; читать их аудиту незачем.
+- **Service worker не получает собственные `chrome.runtime.sendMessage`.** Пинговать его
+  надо со страницы расширения, иначе ответ всегда `undefined`.
 - **Service worker в MV3 умирает между событиями** — ничего нельзя кэшировать в модульной
   области. Всё состояние только в `chrome.storage`.
 - **Скачивание файлов невозможно из service worker**: там нет `URL.createObjectURL`.

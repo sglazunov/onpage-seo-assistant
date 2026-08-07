@@ -15,6 +15,10 @@
     "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:chrome": "playwright test --project=chrome",
+    "test:e2e:opera": "playwright test --project=opera",
+    "test:e2e:extension": "playwright test --project=extension",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
     "zip": "node scripts/zip.mjs"
@@ -24,6 +28,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/chrome": "^0.0.268",
     "@types/node": "^22.20.1",
     "@types/react": "^18.3.12",

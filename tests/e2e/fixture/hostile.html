@@ -1,0 +1,63 @@
+<!doctype html>
+<!-- Deliberately malformed and hostile input. Browsers repair some of this
+     (missing head/body), which is exactly the state the collector must survive.
+     Nothing here is executed by the extension: it is all treated as data. -->
+<html lang="ru-RU">
+<meta charset="utf-8">
+<title>Первый <script>alert(1)</script> заголовок 🚀 | с пайпом</title>
+<title>Второй лишний title</title>
+<meta name="description" content='Описание с <b>HTML</b>, кавычками " и &apos; и эмодзи 🎯 | и пайпом'>
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://example.com/path?a=1|2&b=&quot;x&quot;">
+<meta property="og:title" content="&quot;><img src=x onerror=alert(1)>">
+<meta property="og:image" content="javascript:alert(1)">
+
+<script type="application/ld+json">{ "@type": "Product", broken json here }</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Ок"}</script>
+
+<h1 id="long-h1">ОченьДлинныйЗаголовокБезПробеловКоторыйНикогдаНеЗаканчиваетсяИПродолжаетсяДальшеИДальшеИДальшеИДальшеИДальшеИДальшеИДальшеИДальшеИДальшеИещёНемного</h1>
+<h1>Второй H1 — не должен быть ошибкой</h1>
+<h4>Пропущены уровни H2 и H3</h4>
+<h2 style="display:none">Скрытый через CSS заголовок</h2>
+<h3></h3>
+
+<p>Текст 中文 日本語 текст with English words and числа 12345 и   повторяющиеся    пробелы.</p>
+<p>Интернет-магазин и ещё интернет-магазин, снова интернет-магазин с дефисами.</p>
+<p style="visibility:hidden">Скрытый текст, который не должен попасть в видимый.</p>
+<p>ТекстБезПробеловСовсемДлинныйТекстБезПробеловСовсемДлинныйТекстБезПробелов</p>
+
+<a>Ссылка без href</a>
+<a href="">Пустой href</a>
+<a href="#">Решётка</a>
+<a href="javascript:void(0)">JavaScript</a>
+<a href="/путь с пробелами/файл.html">URL с пробелами</a>
+<a href="https://пример.рф/страница">Unicode URL</a>
+<a href="http://localhost:8080/x">localhost с портом</a>
+<a href="http://192.168.1.1/admin">IP-адрес</a>
+<a href="https://user:pass@basic.test/secret">Basic Auth</a>
+<a href="https://q.test/search?a=1&b=2#frag">Query и fragment</a>
+<a href="mailto:test@example.com">Почта</a>
+<a href="tel:+7 999 000-00-00">Телефон</a>
+<a href="https://out.test/" target="_blank">Внешняя без noopener</a>
+<a href="/dup">Дубль</a>
+<a href="/dup">Другой анкор того же URL</a>
+<a href="/pic"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"></a>
+<a href="/very-long-anchor">Очень длинный анкорный текст, который занимает целое предложение и явно превышает любой разумный порог длины для якоря ссылки на странице</a>
+
+<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+<img src="/definitely-missing-image.png" alt="Не загрузится">
+<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;">
+<svg width="10" height="10"></svg>
+<div style="background-image:url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)">Фон, а не img</div>
+
+<iframe src="about:blank" title="frame"></iframe>
+
+<form>
+  <input type="password" id="pwd" value="СУПЕРСЕКРЕТНЫЙПАРОЛЬ">
+  <input type="text" id="txt" value="ЗНАЧЕНИЕПОЛЯФОРМЫ">
+  <textarea id="area">ТЕКСТИЗТЕКСТАРЕА</textarea>
+</form>
+
+<script type="module" src="./hostile.ts"></script>
+</html>

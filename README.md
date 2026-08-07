@@ -1,5 +1,7 @@
 # OnPage SEO Assistant
 
+**Версия 0.2.0** · статус: Release Candidate ([результаты приёмки](docs/ACCEPTANCE.md))
+
 Браузерное расширение для быстрого технического и контентного SEO-аудита текущей страницы.
 Chrome, Opera, Яндекс Браузер и другие Chromium-браузеры с поддержкой Manifest V3.
 

@@ -8,6 +8,10 @@ release/
 Thumbs.db
 .vite/
 coverage/
+test-results/
+playwright-report/
+blob-report/
+.playwright/
 public/icons/*.png
 *.log
 .env
