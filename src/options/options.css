@@ -1,0 +1,101 @@
+.options {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 28px 20px 60px;
+}
+
+.options h1 {
+  font-size: 20px;
+  margin: 0 0 20px;
+}
+
+.options h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  margin: 28px 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.opt-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px 20px;
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.opt--check {
+  justify-content: flex-start;
+}
+
+.opt select,
+.opt input[type='number'] {
+  min-width: 120px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 13px;
+}
+
+.wide {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 4px 0 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.saved {
+  color: var(--ok);
+  font-size: 13px;
+}
+
+.hist {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.hist th,
+.hist td {
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: start;
+}
+
+.hist__url {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hist a {
+  color: var(--accent);
+}

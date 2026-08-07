@@ -1,0 +1,7 @@
+{
+  "appName": { "message": "OnPage SEO Assistant" },
+  "appDesc": {
+    "message": "Fast on-page SEO audit of the current page: meta tags, headings, links, images, Schema.org, Open Graph."
+  },
+  "cmdOpenPopup": { "message": "Open OnPage SEO Assistant" }
+}

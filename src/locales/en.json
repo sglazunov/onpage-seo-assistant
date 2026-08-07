@@ -1,0 +1,654 @@
+{
+  "ui": {
+    "appName": "OnPage SEO Assistant",
+    "runAudit": "Run audit",
+    "refresh": "Re-run audit",
+    "analyzing": "Analyzing page…",
+    "score": "SEO Score",
+    "errors": "Errors",
+    "warnings": "Warnings",
+    "infos": "Info",
+    "passed": "Passed",
+    "analyzedAt": "Audited at",
+    "export": "Export",
+    "settings": "Settings",
+    "history": "History",
+    "copy": "Copy",
+    "copied": "Copied",
+    "show": "Show on page",
+    "clearHighlights": "Clear highlights",
+    "close": "Close",
+    "none": "not set",
+    "yes": "Yes",
+    "no": "No",
+    "chars": "characters",
+    "words": "words",
+    "count": "items",
+    "value": "Value",
+    "status": "Status",
+    "length": "Length",
+    "recommendation": "Recommendation",
+    "scoreDisclaimer": "The score is this extension's internal diagnostic value. It is not a prediction of Google or Yandex rankings.",
+    "tabs": {
+      "overview": "Overview",
+      "meta": "Meta",
+      "headings": "Headings",
+      "links": "Links",
+      "images": "Images",
+      "schema": "Schema",
+      "social": "Social",
+      "content": "Content",
+      "technical": "Technical"
+    },
+    "groups": { "technical": "Technical", "content": "Content", "social": "Social" },
+    "overview": {
+      "issues": "Issues found",
+      "noIssues": "No issues found. All base checks passed.",
+      "passedChecks": "Passed checks",
+      "byCategory": "Score by category",
+      "filterAll": "All",
+      "truncated": "Data truncated at limit: {n}"
+    },
+    "meta": {
+      "title": "Title",
+      "description": "Description",
+      "robots": "Meta robots",
+      "viewport": "Viewport",
+      "canonical": "Canonical",
+      "language": "Page language (html lang)",
+      "charset": "Charset",
+      "author": "Author",
+      "keywords": "Keywords",
+      "favicon": "Favicon",
+      "hreflang": "Hreflang",
+      "indexability": "Indexability",
+      "indexable": "Page is indexable",
+      "notIndexable": "Indexing is blocked"
+    },
+    "headings": {
+      "tree": "Heading structure",
+      "empty": "No headings found on the page",
+      "hidden": "hidden",
+      "counts": "Count per level"
+    },
+    "links": {
+      "total": "Total links",
+      "internal": "Internal",
+      "external": "External",
+      "nofollow": "Nofollow",
+      "other": "Other",
+      "unique": "Unique URLs",
+      "checkStatuses": "Check link HTTP statuses",
+      "checking": "Checked {done} of {total} links",
+      "highlightAll": "Highlight all",
+      "highlightInternal": "Internal only",
+      "highlightExternal": "External only",
+      "highlightNofollow": "Nofollow only",
+      "exportCsv": "Export CSV",
+      "anchor": "Anchor",
+      "noAnchor": "(no anchor)",
+      "needsPermission": "Network checks need permission to access websites. It is requested once and can be revoked in browser settings."
+    },
+    "images": {
+      "total": "Total images",
+      "noAlt": "Missing ALT",
+      "emptyAlt": "Empty ALT (decorative)",
+      "failed": "Failed to load",
+      "lazy": "Lazy loading",
+      "dimensions": "Size",
+      "highlightAll": "Highlight all",
+      "highlightNoAlt": "Highlight missing ALT",
+      "exportCsv": "Export CSV"
+    },
+    "schema": {
+      "blocks": "Markup blocks",
+      "types": "Entity types",
+      "empty": "No structured data found",
+      "invalid": "Syntax error",
+      "copyJson": "Copy JSON"
+    },
+    "social": {
+      "preview": "Card preview",
+      "openGraph": "Open Graph",
+      "twitter": "Twitter Cards",
+      "noOg": "Open Graph is not configured. Social networks may build the card incorrectly.",
+      "noImage": "No image set"
+    },
+    "content": {
+      "stats": "Text statistics",
+      "words": "Words",
+      "characters": "Characters",
+      "charactersNoSpaces": "Characters without spaces",
+      "paragraphs": "Paragraphs",
+      "lists": "Lists",
+      "tables": "Tables",
+      "ratio": "Text / HTML",
+      "unigrams": "Word frequency",
+      "bigrams": "Bigrams",
+      "trigrams": "Trigrams",
+      "term": "Phrase",
+      "frequency": "Count",
+      "density": "Density",
+      "keyword": "Keyword check",
+      "keywordPlaceholder": "Enter a keyword phrase",
+      "area": "Area",
+      "firstParagraph": "First paragraph",
+      "mainText": "Main text",
+      "found": "Found",
+      "occurrences": "Occurrences",
+      "densityNote": "The extension reports actual values and does not impose a target keyword density."
+    },
+    "technical": {
+      "https": "HTTPS",
+      "httpStatus": "HTTP status",
+      "redirects": "Redirect chain",
+      "robotsTxt": "robots.txt",
+      "sitemap": "sitemap.xml",
+      "xRobots": "X-Robots-Tag",
+      "domNodes": "DOM nodes",
+      "htmlSize": "HTML size",
+      "scripts": "JS files",
+      "styles": "CSS files",
+      "async": "async",
+      "defer": "defer",
+      "blocking": "blocking",
+      "mixedContent": "Mixed content",
+      "jsErrors": "JavaScript errors",
+      "iframes": "iframes",
+      "iframeNote": "iframe contents are not analyzed — this is an extension limitation.",
+      "runNetworkChecks": "Run network checks",
+      "networkNote": "Network checks request robots.txt, sitemap.xml and the headers of the current URL."
+    },
+    "exportMenu": {
+      "json": "JSON",
+      "csv": "CSV",
+      "markdown": "Markdown",
+      "html": "HTML report",
+      "clipboard": "Copy summary"
+    },
+    "settings": {
+      "title": "OnPage SEO Assistant settings",
+      "language": "Interface language",
+      "theme": "Theme",
+      "themeSystem": "System",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "autoRun": "Run audit when the popup opens",
+      "saveHistory": "Save audit history",
+      "historyLimit": "Maximum history entries",
+      "concurrency": "Parallel network requests",
+      "thresholds": "Thresholds",
+      "titleMin": "Title, min characters",
+      "titleMax": "Title, max characters",
+      "descriptionMin": "Description, min characters",
+      "descriptionMax": "Description, max characters",
+      "h1Max": "H1, max characters",
+      "altMax": "ALT, max characters",
+      "anchorMax": "Anchor, max characters",
+      "thresholdNote": "Thresholds are guidance, not hard search-engine rules.",
+      "mutedRules": "Muted rules",
+      "mutedNote": "Muted rules do not affect the score. List IDs separated by commas, e.g. META-014, IMG-007.",
+      "save": "Save",
+      "saved": "Settings saved",
+      "reset": "Reset to defaults",
+      "clearHistory": "Clear history",
+      "privacy": "Privacy policy"
+    },
+    "errorsUi": {
+      "restricted": "Audits cannot run on internal browser pages. Open a regular website.",
+      "noContentScript": "Could not connect to the page. Reload the tab and try again.",
+      "generic": "Audit failed: {msg}",
+      "noPermission": "Permission was not granted — network checks were skipped."
+    }
+  },
+
+  "severity": { "error": "Error", "warning": "Warning", "info": "Info", "passed": "Passed" },
+
+  "categories": {
+    "indexing": "Indexing & robots",
+    "meta": "Title & Description",
+    "headings": "Headings",
+    "canonical": "Canonical & hreflang",
+    "links": "Links",
+    "images": "Images",
+    "schema": "Structured Data",
+    "social": "Social Meta",
+    "content": "Content",
+    "technical": "Technical"
+  },
+
+  "rules": {
+    "META-001": {
+      "t": "Missing title tag",
+      "d": "There is no <title> element in <head>. Search engines will generate a snippet headline themselves, usually with a worse result.",
+      "r": "Add a <title> with a unique page headline, roughly 30–60 characters."
+    },
+    "META-002": {
+      "t": "Title tag is empty",
+      "d": "The <title> element exists but contains no text.",
+      "r": "Fill the <title> with a unique headline that reflects the page content."
+    },
+    "META-003": {
+      "t": "Title is too long",
+      "d": "The title exceeds the recommended threshold. Long titles are often truncated in search results.",
+      "r": "Shorten the title to about {max} characters, front-loading the important words."
+    },
+    "META-004": {
+      "t": "Title is too short",
+      "d": "The title is below the recommended threshold and is likely not descriptive enough.",
+      "r": "Expand the title to roughly {min}–{max} characters."
+    },
+    "META-005": {
+      "t": "Missing meta description",
+      "d": "The page has no <meta name=\"description\">. The snippet description will be assembled automatically from page text.",
+      "r": "Add a unique page description of roughly {min}–{max} characters."
+    },
+    "META-006": {
+      "t": "Meta description is empty",
+      "d": "The description tag is present but its value is empty.",
+      "r": "Fill the description with a short, unique summary of the page."
+    },
+    "META-007": {
+      "t": "Description is too long",
+      "d": "The description exceeds the recommended threshold and will most likely be truncated in the snippet.",
+      "r": "Shorten the description to about {max} characters."
+    },
+    "META-008": {
+      "t": "Missing canonical",
+      "d": "There is no <link rel=\"canonical\">. If duplicates exist, the search engine will pick the canonical version itself.",
+      "r": "Add <link rel=\"canonical\"> with the absolute URL of the preferred version."
+    },
+    "META-009": {
+      "t": "Canonical points to a different URL",
+      "d": "The canonical differs from the current page address. That is expected for duplicates and pagination, but a wrong canonical removes the page from the index.",
+      "r": "Verify that the canonical really is the preferred version of this page."
+    },
+    "META-010": {
+      "t": "Missing meta viewport",
+      "d": "Without a viewport tag the page does not adapt to mobile screen widths.",
+      "r": "Add <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">."
+    },
+    "META-011": {
+      "t": "Page language is not declared",
+      "d": "The <html> element has no lang attribute. This affects screen readers and language-version detection.",
+      "r": "Add a lang attribute to <html>, e.g. lang=\"en\"."
+    },
+    "META-012": {
+      "t": "Page is blocked from indexing (noindex)",
+      "d": "Meta robots contains a noindex directive — the page will not be added to the index.",
+      "r": "If the page should be indexed, remove noindex from meta robots."
+    },
+    "META-013": {
+      "t": "nofollow directive is set",
+      "d": "Meta robots contains nofollow — crawlers will not follow links from this page.",
+      "r": "Confirm the crawl restriction is intentional."
+    },
+    "META-014": {
+      "t": "No favicon found",
+      "d": "Neither <link rel=\"icon\"> nor apple-touch-icon was found.",
+      "r": "Add a favicon — it appears in the browser tab and sometimes in search results."
+    },
+    "META-015": {
+      "t": "Description is too short",
+      "d": "The description is below the recommended threshold and probably does not summarize the page.",
+      "r": "Expand the description to roughly {min}–{max} characters."
+    },
+    "META-016": {
+      "t": "Multiple title tags found",
+      "d": "The document has more than one <title> element. Browsers and crawlers use the first and ignore the rest.",
+      "r": "Keep exactly one <title> in <head>."
+    },
+    "META-017": {
+      "t": "meta keywords is used",
+      "d": "The keywords tag has been ignored by Google for many years. It does no harm but usually adds no value.",
+      "r": "The tag can be removed unless internal site systems need it."
+    },
+    "META-018": {
+      "t": "Multiple canonical tags found",
+      "d": "The page has more than one canonical tag. On conflict a search engine may ignore both.",
+      "r": "Keep exactly one <link rel=\"canonical\">."
+    },
+    "META-019": {
+      "t": "Canonical is a relative URL",
+      "d": "A relative canonical is allowed but more often breaks when the protocol or domain changes.",
+      "r": "Use an absolute canonical URL including protocol and host."
+    },
+    "META-020": {
+      "t": "hreflang has no self-reference",
+      "d": "The hreflang set contains no self-referencing entry for the current URL — a common reason the markup is ignored.",
+      "r": "Add an hreflang entry pointing at the current URL."
+    },
+    "META-021": {
+      "t": "Invalid language code in hreflang",
+      "d": "The hreflang value does not look like a valid language or region code.",
+      "r": "Use ISO format: ru, en-US, de-AT or x-default."
+    },
+    "META-022": {
+      "t": "hreflang has no x-default",
+      "d": "No x-default fallback is declared for users who match none of the locales.",
+      "r": "Add <link rel=\"alternate\" hreflang=\"x-default\"> pointing to the default version."
+    },
+
+    "HEAD-001": {
+      "t": "Missing H1",
+      "d": "No first-level heading was found. H1 helps establish the main topic of the document.",
+      "r": "Add a single H1 that reflects the page's main content."
+    },
+    "HEAD-002": {
+      "t": "H1 is empty",
+      "d": "An H1 element exists but contains no text.",
+      "r": "Fill the H1 with a meaningful heading."
+    },
+    "HEAD-003": {
+      "t": "Multiple H1 elements found",
+      "d": "The page has more than one H1. HTML5 allows this, but it makes the main topic harder to determine and often signals markup problems.",
+      "r": "Review the structure: one H1 is usually enough, with H2 and below for the rest."
+    },
+    "HEAD-004": {
+      "t": "H1 is too long",
+      "d": "The H1 exceeds {max} characters and is harder for readers to parse.",
+      "r": "Shorten the H1 to its essential meaning."
+    },
+    "HEAD-005": {
+      "t": "Empty heading found",
+      "d": "One or more headings contain no text — usually leftover markup or decorative elements.",
+      "r": "Remove empty headings or replace them with neutral elements."
+    },
+    "HEAD-006": {
+      "t": "Heading level skipped",
+      "d": "The hierarchy is broken: a heading is followed by a level that skips one or more intermediate levels.",
+      "r": "Order headings sequentially: H1 → H2 → H3, without gaps."
+    },
+    "HEAD-007": {
+      "t": "Fully duplicated headings",
+      "d": "Several headings share the same text, which weakens the document structure.",
+      "r": "Make headings unique within the page."
+    },
+    "HEAD-008": {
+      "t": "Heading hidden via CSS",
+      "d": "The heading is in the DOM but not visible to the user (display:none, visibility:hidden or zero size).",
+      "r": "Confirm the hiding is intentional, e.g. for accessibility."
+    },
+    "HEAD-009": {
+      "t": "H1 is identical to the title",
+      "d": "Title and H1 match exactly. Not an error, but a missed chance to cover additional phrasing.",
+      "r": "Make H1 and Title complement each other."
+    },
+    "HEAD-010": {
+      "t": "No H2 on the page",
+      "d": "There are no second-level subheadings — long text without structure is harder to read.",
+      "r": "Split the content into sections with H2."
+    },
+
+    "LINK-001": {
+      "t": "Link with empty href",
+      "d": "An <a> element with an empty href was found — it points at the current page.",
+      "r": "Set a valid address or use <button> instead of a link."
+    },
+    "LINK-002": {
+      "t": "Placeholder link href=\"#\"",
+      "d": "The link points at \"#\" and is most likely handled by JavaScript.",
+      "r": "Use <button> for interactive controls and keep links for navigation."
+    },
+    "LINK-003": {
+      "t": "javascript: link",
+      "d": "The address starts with javascript:. Crawlers do not follow such links.",
+      "r": "Replace with a normal href or a <button> with a handler."
+    },
+    "LINK-004": {
+      "t": "Link without anchor text",
+      "d": "The link has no text and no image with alt — neither users nor crawlers can tell where it goes.",
+      "r": "Add link text or an aria-label."
+    },
+    "LINK-005": {
+      "t": "Image link without ALT",
+      "d": "The link wraps an image that has no alt, so the anchor text is empty.",
+      "r": "Add an alt to the image — it becomes the anchor text."
+    },
+    "LINK-006": {
+      "t": "target=\"_blank\" without rel=\"noopener\"",
+      "d": "Opening in a new tab without noopener gives the target page access to window.opener. Modern browsers protect against this by default, but the attribute is still good practice.",
+      "r": "Add rel=\"noopener\" (or noopener noreferrer) to such links."
+    },
+    "LINK-007": {
+      "t": "Internal links with nofollow",
+      "d": "Some internal links carry a nofollow attribute. Steering crawl of your own site this way is rarely useful.",
+      "r": "Check whether nofollow is really needed on internal links."
+    },
+    "LINK-008": {
+      "t": "Same URL with different anchors",
+      "d": "Several links point at one address but use different anchor text.",
+      "r": "Check whether this hurts clarity; navigation usually benefits from one consistent anchor."
+    },
+    "LINK-009": {
+      "t": "Link to http:// from a secure page",
+      "d": "The page is served over HTTPS but links to the insecure version.",
+      "r": "Replace http:// with https:// in link addresses."
+    },
+    "LINK-010": {
+      "t": "Broken link",
+      "d": "The network check returned a 4xx or 5xx response code.",
+      "r": "Fix the address or remove the link."
+    },
+    "LINK-011": {
+      "t": "Link points to a redirect",
+      "d": "The requested address returns a redirect to another URL.",
+      "r": "Point at the final address directly to remove the extra hop."
+    },
+    "LINK-012": {
+      "t": "Anchor text is too long",
+      "d": "The anchor exceeds {max} characters and probably contains a whole sentence instead of a meaningful phrase.",
+      "r": "Shorten the anchor to a short descriptive phrase."
+    },
+
+    "IMG-001": {
+      "t": "Image is missing the ALT attribute",
+      "d": "The alt attribute is not set. This is an accessibility problem and loses context for image search.",
+      "r": "Add an alt describing the content. Use alt=\"\" for purely decorative images."
+    },
+    "IMG-002": {
+      "t": "Empty ALT (decorative image)",
+      "d": "The image has alt=\"\". That is correct for decorative elements but wrong for meaningful ones.",
+      "r": "Confirm the image really is decorative."
+    },
+    "IMG-003": {
+      "t": "ALT is too long",
+      "d": "The alt exceeds {max} characters. Screen readers will announce all of it.",
+      "r": "Shorten the alt to a brief description."
+    },
+    "IMG-004": {
+      "t": "width and height are not set",
+      "d": "Without explicit dimensions the browser cannot reserve space, which causes layout shift while loading.",
+      "r": "Set width and height attributes matching the image's aspect ratio."
+    },
+    "IMG-005": {
+      "t": "Image failed to load",
+      "d": "The browser could not fetch the file at the given address.",
+      "r": "Check the file path and its availability."
+    },
+    "IMG-006": {
+      "t": "No lazy loading below the fold",
+      "d": "The image is below the initial viewport but loads immediately.",
+      "r": "Add loading=\"lazy\" to such images."
+    },
+    "IMG-007": {
+      "t": "No srcset defined",
+      "d": "The image is served as a single file for every screen, including mobile.",
+      "r": "Add srcset and sizes for responsive delivery."
+    },
+    "IMG-008": {
+      "t": "Image is hidden",
+      "d": "The image is in the DOM but is not shown to the user.",
+      "r": "Remove unnecessary hidden images — they may still be downloaded."
+    },
+    "IMG-009": {
+      "t": "SVG without an accessible description",
+      "d": "The inline SVG has no <title>, no aria-label and no role=\"img\".",
+      "r": "Add a <title> inside the SVG or an aria-label on the element."
+    },
+    "IMG-010": {
+      "t": "Lazy loading on an above-the-fold image",
+      "d": "The image is visible immediately but marked loading=\"lazy\", which delays rendering of the main content.",
+      "r": "Remove loading=\"lazy\" from above-the-fold images."
+    },
+
+    "SD-001": {
+      "t": "No structured data found",
+      "d": "The page contains no JSON-LD, Microdata or RDFa.",
+      "r": "Add Schema.org markup matching the page type (Article, Product, Organization, etc.)."
+    },
+    "SD-002": {
+      "t": "JSON-LD syntax error",
+      "d": "A <script type=\"application/ld+json\"> block could not be parsed as JSON — the whole block will be ignored.",
+      "r": "Fix the JSON syntax: trailing commas, unescaped quotes, comments."
+    },
+    "SD-003": {
+      "t": "JSON-LD has no @context",
+      "d": "Without an @context of schema.org the markup will not be interpreted.",
+      "r": "Add \"@context\": \"https://schema.org\" at the object root."
+    },
+    "SD-004": {
+      "t": "JSON-LD has no @type",
+      "d": "The markup object does not declare its entity type.",
+      "r": "Add \"@type\" with a suitable Schema.org type."
+    },
+    "SD-005": {
+      "t": "Duplicated markup types",
+      "d": "The same entity type is described by several blocks. That is allowed but often signals conflicting plugins.",
+      "r": "Check whether the blocks duplicate each other with different data."
+    },
+    "SD-006": {
+      "t": "Microdata or RDFa found",
+      "d": "Besides JSON-LD the page uses an older markup syntax.",
+      "r": "Google recommends JSON-LD as the preferred format."
+    },
+
+    "SOC-001": {
+      "t": "og:title is not set",
+      "d": "Without og:title social networks fall back to the title tag or page text.",
+      "r": "Add <meta property=\"og:title\">."
+    },
+    "SOC-002": {
+      "t": "og:description is not set",
+      "d": "The card description will be assembled automatically and may be irrelevant.",
+      "r": "Add <meta property=\"og:description\">."
+    },
+    "SOC-003": {
+      "t": "og:image is not set",
+      "d": "Without an image the card is far less noticeable in a feed.",
+      "r": "Add an og:image of at least 1200×630 pixels."
+    },
+    "SOC-004": {
+      "t": "og:url is not set",
+      "d": "og:url declares the canonical address for sharing.",
+      "r": "Add <meta property=\"og:url\"> with an absolute URL."
+    },
+    "SOC-005": {
+      "t": "og:type is not set",
+      "d": "The object type is not declared; website is used by default.",
+      "r": "Set og:type, e.g. article for a post."
+    },
+    "SOC-006": {
+      "t": "twitter:card is not set",
+      "d": "Without twitter:card the X/Twitter card may render in a reduced form.",
+      "r": "Add <meta name=\"twitter:card\" content=\"summary_large_image\">."
+    },
+    "SOC-007": {
+      "t": "Open Graph is not configured",
+      "d": "No og: tags were found on the page. Social networks may build the card incorrectly.",
+      "r": "Add the basic set: og:title, og:description, og:image, og:url."
+    },
+    "SOC-008": {
+      "t": "og:url does not match canonical",
+      "d": "The sharing address differs from the page's canonical address.",
+      "r": "Align og:url and canonical to the same value."
+    },
+
+    "CNT-001": {
+      "t": "Little text content",
+      "d": "The page has {n} words of visible text. That is usually not enough for an informational page.",
+      "r": "Assess whether the text covers the page topic. For catalogues and landing pages a small volume can be normal."
+    },
+    "CNT-002": {
+      "t": "Hidden text detected",
+      "d": "Text blocks that are not visually available to the user were found. Some are ordinary tabs and accordions, but hiding text at scale is risky.",
+      "r": "Verify the hidden text belongs to the interface rather than an attempt to place extra keywords."
+    },
+    "CNT-003": {
+      "t": "Excessive word repetition",
+      "d": "The word \"{term}\" occurs {n} times, which is {density}% of the text.",
+      "r": "Check that the phrasing reads naturally. The extension sets no target density but sharp outliers are worth reviewing."
+    },
+    "CNT-004": {
+      "t": "Low text-to-HTML ratio",
+      "d": "Visible text makes up {ratio}% of the document size.",
+      "r": "This is an indicative metric. A high markup share often points at heavy templates."
+    },
+    "CNT-005": {
+      "t": "No paragraphs on the page",
+      "d": "No <p> element with text was found.",
+      "r": "Structure text into paragraphs — it improves both readability and parsing."
+    },
+
+    "TECH-001": {
+      "t": "Page is not served over HTTPS",
+      "d": "The protocol is {protocol}. Browsers mark such pages as not secure.",
+      "r": "Set up HTTPS and a permanent redirect from http to https."
+    },
+    "TECH-002": {
+      "t": "Mixed content",
+      "d": "A secure page loads resources over http://. The browser may block them.",
+      "r": "Move every subresource to https://."
+    },
+    "TECH-003": {
+      "t": "Document charset is not declared",
+      "d": "No <meta charset> was found. Without an explicit charset characters may render incorrectly.",
+      "r": "Add <meta charset=\"utf-8\"> as the first element in <head>."
+    },
+    "TECH-004": {
+      "t": "Large DOM size",
+      "d": "The document has {n} nodes. A large DOM slows rendering and increases memory use.",
+      "r": "Reduce depth and element count, especially in long lists."
+    },
+    "TECH-005": {
+      "t": "Render-blocking scripts",
+      "d": "{n} external scripts without async or defer were found — they delay HTML parsing.",
+      "r": "Add defer or async wherever execution order allows."
+    },
+    "TECH-006": {
+      "t": "JavaScript errors on the page",
+      "d": "Unhandled errors were recorded while the page ran. They can break content rendering.",
+      "r": "Open the browser console and fix the errors."
+    },
+    "TECH-007": {
+      "t": "The page uses iframes",
+      "d": "{n} frames were found. Their contents are not part of this audit — an extension limitation.",
+      "r": "Audit frame contents separately if they matter for indexing."
+    },
+    "TECH-008": {
+      "t": "URL is blocked by robots.txt",
+      "d": "The rule \"{rule}\" in robots.txt disallows crawling of the current address.",
+      "r": "If the page should be indexed, adjust robots.txt."
+    },
+    "TECH-009": {
+      "t": "X-Robots-Tag blocks indexing",
+      "d": "The X-Robots-Tag HTTP header contains noindex: {value}.",
+      "r": "Remove the server-side directive if the restriction is not intended."
+    },
+    "TECH-010": {
+      "t": "sitemap.xml not found",
+      "d": "No sitemap is served at the standard /sitemap.xml address and none is declared in robots.txt.",
+      "r": "Publish sitemap.xml and declare it in robots.txt with a Sitemap directive."
+    },
+    "TECH-011": {
+      "t": "Redirect chain detected",
+      "d": "The requested URL passes through {n} redirects before the final address.",
+      "r": "Reduce the chain to a single hop."
+    },
+    "TECH-012": {
+      "t": "robots.txt is unavailable",
+      "d": "robots.txt was not found or returned an error. A missing file does not block crawling, but you lose control over it.",
+      "r": "Place a robots.txt at the domain root."
+    }
+  }
+}

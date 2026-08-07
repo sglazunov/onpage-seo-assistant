@@ -1,0 +1,42 @@
+{
+  "name": "onpage-seo-assistant",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Browser extension for fast on-page SEO audit (Chrome / Opera / Yandex Browser, Manifest V3)",
+  "license": "MIT",
+  "scripts": {
+    "icons": "node scripts/gen-icons.mjs",
+    "build:ui": "vite build",
+    "build:content": "vite build -c vite.config.content.ts",
+    "build:sw": "vite build -c vite.config.sw.ts",
+    "build": "npm run icons && npm run build:ui && npm run build:content && npm run build:sw",
+    "dev": "npm run build",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.node.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
+    "zip": "node scripts/zip.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "@types/node": "^22.20.1",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "jsdom": "^25.0.1",
+    "prettier": "^3.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.5"
+  }
+}
