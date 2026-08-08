@@ -48,6 +48,27 @@
   box-sizing: border-box;
 }
 
+/* Slim scrollbars everywhere: inside a 460px popup the default Windows bar
+   takes a noticeable slice of the usable width and height. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 body.popup-body {
   margin: 0;
   width: 460px;
@@ -284,26 +305,34 @@ body.options-body {
 
 /* ------------------------------- tabs ------------------------------- */
 
+/* Wrapping, never scrolling. A horizontal scrollbar here is not just ugly: on
+   Windows it is a classic 15px bar that eats the bottom half of the labels. */
 .tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 0;
-  overflow-x: auto;
+  padding: 0 2px;
   border-bottom: 1px solid var(--line);
   background: var(--bg);
-  scrollbar-width: thin;
 }
 
 .tabs__btn {
-  flex: 0 0 auto;
-  padding: 8px 11px;
+  /* An 18% basis forces at most five per row, so the nine tabs split 5 + 4
+     instead of leaving a single stretched button alone on the second row. */
+  flex: 1 1 18%;
+  min-width: 0;
+  padding: 7px 6px;
   border: none;
   border-bottom: 2px solid transparent;
   background: none;
   color: var(--muted);
   font: inherit;
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 1.3;
   cursor: pointer;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .tabs__btn:hover {
