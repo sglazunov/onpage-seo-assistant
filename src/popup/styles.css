@@ -389,6 +389,12 @@ body.options-body {
   background: none;
 }
 
+.btn--failed,
+.btn--failed:hover:not(:disabled) {
+  color: var(--error);
+  border-color: var(--error);
+}
+
 .btn--sm {
   padding: 3px 7px;
   font-size: 11px;

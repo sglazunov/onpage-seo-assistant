@@ -16,6 +16,7 @@
     "copy": "Copy",
     "copied": "Copied",
     "show": "Show on page",
+    "notFound": "Element is no longer on the page — re-run the audit",
     "clearHighlights": "Clear highlights",
     "close": "Close",
     "none": "not set",

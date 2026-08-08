@@ -5,9 +5,23 @@ export type ExtensionMessage =
   | { type: 'PING' }
   | { type: 'START_AUDIT'; tabId?: number }
   | { type: 'GET_PAGE_DATA' }
-  | { type: 'HIGHLIGHT'; selectors: string[]; category: string; label?: string }
+  | {
+      type: 'HIGHLIGHT';
+      selectors: string[];
+      category: string;
+      label?: string;
+      /** Text/src the element had when the report was built — guards against a
+       *  positional selector resolving to a different element after a re-render. */
+      verify?: string;
+    }
   | { type: 'CLEAR_HIGHLIGHTS' }
-  | { type: 'SCROLL_TO'; selector: string; category: string; label?: string }
+  | {
+      type: 'SCROLL_TO';
+      selector: string;
+      category: string;
+      label?: string;
+      verify?: string;
+    }
   | { type: 'CHECK_LINKS'; links: Pick<LinkInfo, 'resolved' | 'type'>[]; concurrency: number }
   | { type: 'CHECK_ROBOTS'; origin: string; pageUrl: string }
   | { type: 'FETCH_HEADERS'; url: string }

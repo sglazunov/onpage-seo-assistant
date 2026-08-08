@@ -34,13 +34,19 @@ if (!window.__onpageSeoAssistantReady__) {
               selectors: message.selectors,
               category: message.category,
               label: message.label,
+              verify: message.verify,
             });
             sendResponse({ ok: true, data: { matched } });
             return false;
           }
 
           case 'SCROLL_TO': {
-            const found = scrollTo(message.selector, message.category, message.label);
+            const found = scrollTo(
+              message.selector,
+              message.category,
+              message.label,
+              message.verify,
+            );
             sendResponse({ ok: true, data: { found } });
             return false;
           }

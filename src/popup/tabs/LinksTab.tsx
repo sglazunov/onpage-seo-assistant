@@ -192,7 +192,12 @@ export function LinksTab({
             {link.rel.length ? <em className="rel"> rel={link.rel.join(' ')}</em> : null}
           </span>,
           <StatusCell link={link} />,
-          <ShowButton selector={link.selector} category="links" label="a" />,
+          <ShowButton
+            selector={link.selector}
+            category="links"
+            label="a"
+            verify={link.text || link.resolved}
+          />,
         ])}
       />
     </div>

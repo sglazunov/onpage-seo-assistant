@@ -10,9 +10,10 @@ const MAX_BOXES = 300;
 
 let host: HTMLDivElement | null = null;
 let shadow: ShadowRoot | null = null;
-let tracked: { element: Element; box: HTMLDivElement }[] = [];
+let tracked: { element: Element; box: HTMLDivElement; snapshot: string }[] = [];
 let rafPending = false;
 let listenersAttached = false;
+let domObserver: MutationObserver | null = null;
 
 function ensureHost(): ShadowRoot {
   if (shadow && host?.isConnected) return shadow;
@@ -78,11 +79,45 @@ function positionBox(box: HTMLDivElement, element: Element): void {
   box.style.height = `${rect.height}px`;
 }
 
+/**
+ * Drops overlays that no longer mean what they meant when drawn: either the
+ * element left the document, or a framework reused the node and swapped its
+ * content. React does the latter on a route change — the <h1> stays, its text
+ * changes — so an isConnected check alone would leave a box pointing at
+ * something the report never described.
+ */
+function pruneDetached(): void {
+  const survivors: typeof tracked = [];
+  for (const entry of tracked) {
+    const stillValid =
+      entry.element.isConnected && contentSnapshot(entry.element) === entry.snapshot;
+    if (stillValid) survivors.push(entry);
+    else entry.box.remove();
+  }
+  tracked = survivors;
+  if (tracked.length === 0) stopObserving();
+}
+
+function startObserving(): void {
+  if (domObserver || typeof MutationObserver === 'undefined') return;
+  domObserver = new MutationObserver(() => {
+    pruneDetached();
+    reposition();
+  });
+  domObserver.observe(document.documentElement, { childList: true, subtree: true });
+}
+
+function stopObserving(): void {
+  domObserver?.disconnect();
+  domObserver = null;
+}
+
 function reposition(): void {
   if (rafPending) return;
   rafPending = true;
   requestAnimationFrame(() => {
     rafPending = false;
+    pruneDetached();
     for (const { element, box } of tracked) positionBox(box, element);
   });
 }
@@ -104,6 +139,7 @@ export function clearHighlights(): void {
     for (const { box } of tracked) box.remove();
   }
   tracked = [];
+  stopObserving();
 }
 
 export interface HighlightOptions {
@@ -111,10 +147,53 @@ export interface HighlightOptions {
   category: string;
   label?: string;
   pulse?: boolean;
+  /**
+   * Text or src the element carried when the report was built. A positional
+   * selector like `li:nth-of-type(2) > a` keeps resolving after an SPA
+   * re-render, just to a different element — this is what stops the highlight
+   * landing on the neighbour.
+   */
+  verify?: string;
+}
+
+const VERIFY_LEN = 80;
+
+function normalise(value: string): string {
+  return value.replace(/\s+/g, ' ').trim().slice(0, VERIFY_LEN).toLowerCase();
+}
+
+/**
+ * What the element showed when the box was drawn. A framework that reuses a
+ * node across a route change swaps its content but keeps the node, so identity
+ * has to be judged by content, not by object reference.
+ */
+function contentSnapshot(element: Element): string {
+  const src = (element as HTMLImageElement).currentSrc || element.getAttribute('src') || '';
+  return `${normalise(element.textContent ?? '')}|${normalise(src)}`;
+}
+
+function matchesVerify(element: Element, verify?: string): boolean {
+  if (!verify) return true;
+  const needle = normalise(verify);
+  if (!needle) return true;
+
+  const text = normalise(element.textContent ?? '');
+  if (text && text === needle) return true;
+
+  const src = (element as HTMLImageElement).currentSrc || element.getAttribute('src') || '';
+  if (src && normalise(src).includes(needle)) return true;
+
+  return false;
 }
 
 /** Returns how many of the requested selectors actually resolved. */
-export function highlight({ selectors, category, label, pulse }: HighlightOptions): number {
+export function highlight({
+  selectors,
+  category,
+  label,
+  pulse,
+  verify,
+}: HighlightOptions): number {
   clearHighlights();
   const root = ensureHost();
   const color = HIGHLIGHT_COLORS[category] ?? HIGHLIGHT_COLORS.default;
@@ -128,6 +207,7 @@ export function highlight({ selectors, category, label, pulse }: HighlightOption
       continue; // A selector can go stale after a SPA re-render.
     }
     if (!element) continue;
+    if (!matchesVerify(element, verify)) continue;
 
     const box = document.createElement('div');
     box.className = pulse ? 'box pulse' : 'box';
@@ -140,23 +220,29 @@ export function highlight({ selectors, category, label, pulse }: HighlightOption
     }
     positionBox(box, element);
     root.appendChild(box);
-    tracked.push({ element, box });
+    tracked.push({ element, box, snapshot: contentSnapshot(element) });
     matched += 1;
   }
+  if (matched > 0) startObserving();
   return matched;
 }
 
-/** Scrolls to a single element and flashes it. */
-export function scrollTo(selector: string, category: string, label?: string): boolean {
+/** Scrolls to a single element and flashes it. False means "no longer there". */
+export function scrollTo(
+  selector: string,
+  category: string,
+  label?: string,
+  verify?: string,
+): boolean {
   let element: Element | null = null;
   try {
     element = document.querySelector(selector);
   } catch {
     return false;
   }
-  if (!element) return false;
+  if (!element || !matchesVerify(element, verify)) return false;
 
-  highlight({ selectors: [selector], category, label, pulse: true });
+  highlight({ selectors: [selector], category, label, pulse: true, verify });
   element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
   // The smooth scroll finishes after the initial layout pass.
   window.setTimeout(reposition, 400);

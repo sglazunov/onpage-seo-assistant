@@ -44,11 +44,15 @@ export function ShowButton({
   selectors,
   category,
   label,
+  verify,
 }: {
   selector?: string;
   selectors?: string[];
   category: string;
   label?: string;
+  /** Element text or src as captured in the report, to reject a re-rendered
+   *  element that merely occupies the same position. */
+  verify?: string;
 }) {
   const { t } = useI18n();
   const [failed, setFailed] = useState(false);
@@ -58,23 +62,28 @@ export function ShowButton({
   const onClick = async () => {
     try {
       if (selectors && selectors.length > 1) {
-        const { matched } = await api.highlight(selectors, category, label);
+        const { matched } = await api.highlight(selectors, category, label, verify);
         setFailed(matched === 0);
-        if (matched > 0) await api.scrollTo(selectors[0], category, label);
+        if (matched > 0) await api.scrollTo(selectors[0], category, label, verify);
       } else {
         const target = selector ?? selectors![0];
-        const { found } = await api.scrollTo(target, category, label);
+        const { found } = await api.scrollTo(target, category, label, verify);
         setFailed(!found);
       }
     } catch {
       setFailed(true);
     }
-    setTimeout(() => setFailed(false), 2000);
+    setTimeout(() => setFailed(false), 3000);
   };
 
   return (
-    <button type="button" className="btn btn--ghost btn--sm" onClick={onClick}>
-      {failed ? '✕' : '⌖'} {t('ui.show')}
+    <button
+      type="button"
+      className={`btn btn--ghost btn--sm${failed ? ' btn--failed' : ''}`}
+      onClick={onClick}
+      title={failed ? t('ui.notFound') : undefined}
+    >
+      {failed ? `✕ ${t('ui.notFound')}` : `⌖ ${t('ui.show')}`}
     </button>
   );
 }

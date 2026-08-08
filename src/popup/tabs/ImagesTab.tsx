@@ -119,7 +119,12 @@ export function ImagesTab({ result }: { result: AuditResult }) {
             {image.loading ? ` · ${image.loading}` : ''}
             {image.loaded ? '' : ' · ✕'}
           </span>,
-          <ShowButton selector={image.selector} category="images" label="img" />,
+          <ShowButton
+            selector={image.selector}
+            category="images"
+            label="img"
+            verify={image.src}
+          />,
         ])}
       />
     </div>

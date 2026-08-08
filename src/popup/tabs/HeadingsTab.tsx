@@ -54,7 +54,12 @@ export function HeadingsTab({ result }: { result: AuditResult }) {
               <span className={`outline__tag outline__tag--l${h.level}`}>H{h.level}</span>
               <span className="outline__text">{h.text || <em>—</em>}</span>
               {h.visible ? null : <span className="outline__flag">{t('ui.headings.hidden')}</span>}
-              <ShowButton selector={h.selector} category="headings" label={`H${h.level}`} />
+              <ShowButton
+                selector={h.selector}
+                category="headings"
+                label={`H${h.level}`}
+                verify={h.text}
+              />
             </li>
           ))}
         </ol>

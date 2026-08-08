@@ -16,10 +16,10 @@ async function send<T>(message: ExtensionMessage): Promise<T> {
 
 export const api = {
   getPageData: () => send<PageData>({ type: 'GET_PAGE_DATA' }),
-  highlight: (selectors: string[], category: string, label?: string) =>
-    send<{ matched: number }>({ type: 'HIGHLIGHT', selectors, category, label }),
-  scrollTo: (selector: string, category: string, label?: string) =>
-    send<{ found: boolean }>({ type: 'SCROLL_TO', selector, category, label }),
+  highlight: (selectors: string[], category: string, label?: string, verify?: string) =>
+    send<{ matched: number }>({ type: 'HIGHLIGHT', selectors, category, label, verify }),
+  scrollTo: (selector: string, category: string, label?: string, verify?: string) =>
+    send<{ found: boolean }>({ type: 'SCROLL_TO', selector, category, label, verify }),
   clearHighlights: () => send<null>({ type: 'CLEAR_HIGHLIGHTS' }),
   checkLinks: (links: { resolved: string; type: string }[], concurrency: number) =>
     send<LinkCheckResult[]>({
